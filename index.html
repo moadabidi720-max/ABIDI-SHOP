@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABIDI SHOP | الأناقة المغربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dusty-pink: #DCAE96;
+            --light-gray: #E5E5E5;
+            --dark-charcoal: #333333;
+        }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            scroll-behavior: smooth; 
+            background-color: var(--light-gray);
+            color: var(--dark-charcoal);
+        }
+        .logo-text { color: white; }
+        .product-card { 
+            transition: all 0.4s ease; 
+            border-radius: 2rem; 
+            overflow: hidden; 
+            background: white; 
+            border: 1px solid var(--dusty-pink); 
+            position: relative; 
+        }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(220, 174, 150, 0.3); }
+        .badge-sale { 
+            position: absolute; top: 1rem; left: 1rem; 
+            background: var(--dark-charcoal); color: var(--dusty-pink); 
+            padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 900; z-index: 10; 
+        }
+        .size-option { 
+            transition: all 0.2s; cursor: pointer; border: 2px solid var(--light-gray); 
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 15px; font-weight: 900; color: var(--dark-charcoal);
+        }
+        .size-option.selected { 
+            border-color: var(--dusty-pink); background-color: var(--dusty-pink); color: white; 
+        }
+        .btn-primary {
+            background-color: var(--dusty-pink);
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #c4967e;
+            transform: scale(1.02);
+        }
+        .modal-content { animation: slideUp 0.4s ease-out; border-radius: 2.5rem; border-top: 8px solid var(--dusty-pink); }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        select, input { border: 1px solid var(--light-gray) !important; color: var(--dark-charcoal) !important; }
+        select:focus, input:focus { border-color: var(--dusty-pink) !important; outline: none; }
+        .hero-section { background-color: var(--dusty-pink); color: white; }
+    </style>
+</head>
+<body>
+
+    <div style="background-color: var(--dark-charcoal);" class="text-white py-2 text-center text-xs font-bold">
+        ✨ توصيل سريع لجميع مدن المغرب - الدفع عند الاستلام ✨
+    </div>
+
+    <nav style="background-color: var(--dark-charcoal);" class="py-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex flex-col">
+                <span class="text-2xl md:text-3xl font-black logo-text italic tracking-tighter">ABIDI SHOP</span>
+                <span style="color: var(--dusty-pink);" class="text-[10px] font-bold uppercase tracking-widest text-center">أناقة مغربية أصيلة</span>
+            </div>
+            <a href="https://wa.me/212752491814" class="btn-primary p-2 rounded-full shadow-md">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.481 5.229 3.481 8.405c0 6.555-5.332 11.89-11.888 11.89-2.015 0-4.004-.511-5.772-1.483l-6.212 1.697zm6.208-4.108l.347.206c1.514.9 3.327 1.375 5.215 1.375 5.514 0 10.001-4.487 10.001-10.001 0-2.671-1.041-5.181-2.932-7.072s-4.401-2.932-7.072-2.932c-5.513 0-10 4.487-10 10 0 1.956.57 3.864 1.649 5.53l.226.351-.999 3.649 3.737-.999z"/></svg>
+            </a>
+        </div>
+    </nav>
+
+    <header class="hero-section py-16 px-6 text-center shadow-inner">
+        <h1 class="text-4xl md:text-6xl font-black mb-4">جمال <span style="color: var(--dark-charcoal);">بلمسة</span> رقيقة</h1>
+        <p class="text-white/80 max-w-xl mx-auto font-medium">مجموعتنا المختارة من السبرديلات تجمع بين الراحة القصوى واللون الوردي الساحر.</p>
+    </header>
+
+    <main class="container mx-auto px-4 -mt-10 relative z-20 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="productsGrid"></div>
+    </main>
+
+    <div id="productModal" class="fixed inset-0 bg-black/60 z-[100] hidden items-end md:items-center justify-center p-0 md:p-4">
+        <div class="modal-content bg-white w-full max-w-2xl shadow-2xl relative overflow-hidden">
+            <button onclick="closeModal()" style="color: var(--dark-charcoal);" class="absolute top-4 right-4 bg-gray-100 w-10 h-10 rounded-full font-bold z-50 hover:bg-gray-200 transition-colors">✕</button>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="w-full md:w-1/2 bg-white flex items-center justify-center p-6 border-b md:border-b-0 md:border-l border-gray-100">
+                    <img id="modalImg" src="" class="max-h-64 md:max-h-full object-contain rounded-2xl shadow-sm">
+                </div>
+                
+                <div class="p-8 w-full md:w-1/2">
+                    <h2 id="modalTitle" style="color: var(--dark-charcoal);" class="text-2xl font-black mb-2 italic"></h2>
+                    <p id="modalDesc" class="text-sm text-gray-400 mb-6"></p>
+                    
+                    <div class="flex items-center gap-3 mb-6">
+                        <span id="modalPrice" style="color: var(--dusty-pink);" class="text-3xl font-black"></span>
+                        <span class="text-gray-300 line-through text-sm font-bold">299 MAD</span>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-[10px] font-black text-gray-400 mb-2 uppercase tracking-tighter">المقاسات المتوفرة</p>
+                            <div class="flex gap-2">
+                                <div onclick="selectSize(this, '37')" class="size-option">37</div>
+                                <div onclick="selectSize(this, '38')" class="size-option">38</div>
+                                <div onclick="selectSize(this, '39')" class="size-option">39</div>
+                                <div onclick="selectSize(this, '40')" class="size-option">40</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <select id="regionSelect" onchange="updateCities()" class="w-full py-3 px-4 rounded-xl bg-gray-50 font-bold text-sm">
+                                <option value="">إختر الجهة...</option>
+                            </select>
+                            <select id="citySelect" class="w-full py-3 px-4 rounded-xl bg-gray-50 font-bold text-sm">
+                                <option value="">إختر المدينة...</option>
+                            </select>
+                            <input type="tel" id="userPhone" placeholder="رقم هاتفك" class="w-full py-3 px-4 rounded-xl bg-gray-50 font-bold text-center">
+                        </div>
+
+                        <button onclick="confirmOrder()" class="btn-primary w-full py-4 rounded-2xl font-black text-lg shadow-lg flex items-center justify-center gap-2">
+                            <span>طلب عبر واتساب</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background-color: var(--dark-charcoal);" class="text-white py-12 text-center">
+        <p style="color: var(--dusty-pink);" class="font-black mb-6 italic text-xl">لا إله إلا الله محمد رسول الله صلى الله عليه وسلم</p>
+        <p class="text-gray-500 text-[10px] tracking-[0.4em]">© 2026 ABIDI SHOP MOROCCO</p>
+    </footer>
+
+    <script>
+        const moroccoData = {
+            "طنجة - تطوان - الحسيمة": ["طنجة", "تطوان", "الحسيمة", "القصر الكبير", "العرائش", "شفشاون", "وزان", "الفنيدق", "المضيق", "أصيلة", "تارجيست", "مرتيل", "بوزنيقة"],
+            "الشرق": ["وجدة", "الناظور", "بركان", "تاوريرت", "جرسيف", "جرادة", "فكيك", "بوعرفة", "السعيدية", "الدريوش", "العيون الشرقية", "زايو"],
+            "فاس - مكناس": ["فاس", "مكناس", "تازة", "صفرو", "إفران", "الحاجب", "بولمان", "ميسور", "تاونات", "مولاي يعقوب", "أزرو", "عين الشكاك", "قرية با محمد"],
+            "الرباط - سلا - القنيطرة": ["الرباط", "سلا", "القنيطرة", "تمارة", "الصخيرات", "الخميسات", "سيدي قاسم", "سيدي سليمان", "تيفلت", "سوق الأربعاء", "سيدي يحيى الغرب"],
+            "بني ملال - خنيفرة": ["بني ملال", "خنيفرة", "خريبكة", "الفقيه بن صالح", "أزيلال", "قصبة تادلة", "وادي زم", "دمنات", "مريرت", "أفورار"],
+            "الدار البيضاء - سطات": ["الدار البيضاء", "سطات", "المحمدية", "الجديدة", "برشيد", "بنسليمان", "سيدي بنور", "مديونة", "النواصر", "أزمور", "لولاد", "حد السوالم"],
+            "مراكش - آسفي": ["مراكش", "آسفي", "الصويرة", "قلعة السراغنة", "تحناوت", "شيشاوة", "ابن جرير", "اليوسفية", "تامنصورت", "سيدي بنور", "العطاوية"],
+            "درعة - تافيلالت": ["الرشيدية", "ورزازات", "ميدلت", "تنغير", "زاكورة", "أرفود", "الريصاني", "مولاي علي الشريف", "بومالن دادس", "قلعة مكونة"],
+            "سوس - ماسة": ["أكادير", "إنزكان", "أيت ملول", "تيزنيت", "تارودانت", "بيوكرى", "طاطا", "تافراوت", "أولاد تايمة", "فم الحصن"],
+            "كلميم - واد نون": ["كلميم", "سيدي إفني", "طانطان", "آسا", "الزاك", "لخصاص", "بويزكارن", "الوطية"],
+            "العيون - الساقية الحمراء": ["العيون", "بوجدور", "السمارة", "طرفاية", "المرسى"],
+            "الداخلة - وادي الذهب": ["الداخلة", "أوسرد", "الكركرات", "بئر كندوز"]
+        };
+
+        const products = [
+            {title: 'أحمر عصري Modern', desc: 'حذاء رياضي أنيق بتصميم جريء ولون جذاب مناسب للخروجات اليومية.', img: 'https://i.postimg.cc/mkxx2TvX/Whats-App-Image-2026-02-04-at-22-37-06.jpg', price: '199 MAD'},
+            {title: 'أسود كلاسيك Pro', desc: 'حذاء أسود فاخر يجمع بين الراحة والمتانة، مثالي للرياضة والعمل.', img: 'https://i.postimg.cc/8563Yq7W/Whats-App-Image-2026-02-04-at-22-37-08.jpg', price: '199 MAD'},
+            {title: 'رمادي Urban Style', desc: 'تصميم عصري بلون رمادي هادئ يتماشى مع جميع الملابس الشبابية.', img: 'https://i.postimg.cc/gc3QHb9T/Whats-App-Image-2026-02-04-at-22-37-07.jpg', price: '199 MAD'},
+            {title: 'سبرديلة Sport بيج', desc: 'سبرديلة خفيفة الوزن مريحة جداً للمشي الطويل.', img: 'https://i.postimg.cc/9FphRQkv/Whats-App-Image-2025-10-28-at-22-50-24.jpg', price: '199 MAD'},
+            {title: 'سبرديلة Sport سوداء', desc: 'اللون الأسود الملكي بتصميم رياضي فريد.', img: 'https://i.postimg.cc/ZKTkShqf/Whats-App-Image-2025-10-28-at-22-50-24-(1).jpg', price: '199 MAD'},
+            {title: 'سبرديلة Sport بني', desc: 'لمسة كلاسيكية على حذاء رياضي عصري.', img: 'https://i.postimg.cc/TPYCHk7V/Whats-App-Image-2025-10-28-at-22-50-24-(2).jpg', price: '199 MAD'}
+        ];
+
+        const grid = document.getElementById('productsGrid');
+        products.forEach(p => {
+            grid.innerHTML += `
+                <div class="product-card" onclick="openModal('${p.title}', '${p.price}', '${p.img}', '${p.desc}')">
+                    <div class="badge-sale">تخفيض خاص</div>
+                    <img src="${p.img}" class="w-full h-64 object-cover">
+                    <div class="p-6 text-center">
+                        <h3 class="font-black text-xl mb-2" style="color: var(--dark-charcoal);">${p.title}</h3>
+                        <div class="flex justify-center items-center gap-2 mb-4">
+                            <span style="color: var(--dusty-pink);" class="font-black text-2xl">${p.price}</span>
+                            <span class="bg-gray-50 text-gray-300 line-through text-xs px-2 py-1 rounded">299 MAD</span>
+                        </div>
+                        <button class="btn-primary w-full py-3 rounded-xl font-bold">اكتشف الآن</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        const regionSelect = document.getElementById('regionSelect');
+        for (let region in moroccoData) {
+            regionSelect.innerHTML += `<option value="${region}">${region}</option>`;
+        }
+
+        let currentProduct = "", currentPrice = "", selectedSizeVal = "";
+
+        function updateCities() {
+            const citySelect = document.getElementById('citySelect');
+            const region = regionSelect.value;
+            citySelect.innerHTML = '<option value="">إختر المدينة...</option>';
+            if (region) {
+                moroccoData[region].forEach(city => {
+                    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+                });
+            }
+        }
+
+        function openModal(title, price, img, desc) {
+            currentProduct = title;
+            currentPrice = price;
+            selectedSizeVal = "";
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('modalImg').src = img;
+            document.getElementById('modalDesc').innerText = desc;
+            document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('regionSelect').value = "";
+            document.getElementById('citySelect').innerHTML = '<option value="">إختر المدينة...</option>';
+            document.getElementById('userPhone').value = "";
+            document.getElementById('productModal').classList.remove('hidden');
+            document.getElementById('productModal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function selectSize(element, size) {
+            selectedSizeVal = size;
+            document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function confirmOrder() {
+            const region = document.getElementById('regionSelect').value;
+            const city = document.getElementById('citySelect').value;
+            const phone = document.getElementById('userPhone').value;
+            if (!selectedSizeVal) { alert("يرجى اختيار المقاس!"); return; }
+            if (!region || !city) { alert("يرجى اختيار المنطقة!"); return; }
+            if (!phone || phone.length < 10) { alert("يرجى إدخال رقم هاتف صحيح!"); return; }
+            const myNumber = "212752491814";
+            const message = `طلب جديد - ABIDI SHOP 👟\n\n📦 المنتج: ${currentProduct}\n📏 المقاس: ${selectedSizeVal}\n💰 الثمن: ${currentPrice}\n📍 الجهة: ${region}\n🏙️ المدينة: ${city}\n📞 الهاتف: ${phone}`;
+            window.open(`https://api.whatsapp.com/send?phone=${myNumber}&text=${encodeURIComponent(message)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
