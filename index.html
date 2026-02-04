@@ -77,7 +77,7 @@
 
     <header class="hero-section py-16 px-6 text-center shadow-inner">
         <h1 class="text-4xl md:text-6xl font-black mb-4">جمال <span style="color: var(--dark-charcoal);">بلمسة</span> رقيقة</h1>
-        <p class="text-white/80 max-w-xl mx-auto font-medium">مجموعتنا المختارة من السبرديلات تجمع بين الراحة القصوى واللون الوردي الساحر.</p>
+        <p class="text-white/80 max-w-xl mx-auto font-medium">مجموعتنا المختارة من السبرديلات تجمع بين الراحة القصوى والتصميم الساحر.</p>
     </header>
 
     <main class="container mx-auto px-4 -mt-10 relative z-20 pb-20">
@@ -185,7 +185,7 @@
             regionSelect.innerHTML += `<option value="${region}">${region}</option>`;
         }
 
-        let currentProduct = "", currentPrice = "", selectedSizeVal = "";
+        let currentProduct = "", currentPrice = "", currentImg = "", selectedSizeVal = "";
 
         function updateCities() {
             const citySelect = document.getElementById('citySelect');
@@ -201,6 +201,7 @@
         function openModal(title, price, img, desc) {
             currentProduct = title;
             currentPrice = price;
+            currentImg = img;
             selectedSizeVal = "";
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalPrice').innerText = price;
@@ -233,8 +234,19 @@
             if (!selectedSizeVal) { alert("يرجى اختيار المقاس!"); return; }
             if (!region || !city) { alert("يرجى اختيار المنطقة!"); return; }
             if (!phone || phone.length < 10) { alert("يرجى إدخال رقم هاتف صحيح!"); return; }
+            
             const myNumber = "212752491814";
-            const message = `طلب جديد - ABIDI SHOP 👟\n\n📦 المنتج: ${currentProduct}\n📏 المقاس: ${selectedSizeVal}\n💰 الثمن: ${currentPrice}\n📍 الجهة: ${region}\n🏙️ المدينة: ${city}\n📞 الهاتف: ${phone}`;
+            
+            // إضافة رابط الصورة أسفل الرسالة لضمان ظهور معاينة (Preview)
+            const message = `طلب جديد - ABIDI SHOP 👟\n\n` +
+                          `📦 المنتج: ${currentProduct}\n` +
+                          `📏 المقاس: ${selectedSizeVal}\n` +
+                          `💰 الثمن: ${currentPrice}\n` +
+                          `📍 الجهة: ${region}\n` +
+                          `🏙️ المدينة: ${city}\n` +
+                          `📞 الهاتف: ${phone}\n\n` +
+                          `🖼️ صورة الحذاء:\n${currentImg}`;
+                          
             window.open(`https://api.whatsapp.com/send?phone=${myNumber}&text=${encodeURIComponent(message)}`, '_blank');
         }
     </script>
